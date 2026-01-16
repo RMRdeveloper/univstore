@@ -1,0 +1,55 @@
+services:
+  mongodb:
+    image: mongo:8.0
+    container_name: mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    env_file: .env
+    volumes:
+      - mongodb_data_dev:/data/db
+    networks:
+      - tienda_network
+
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    container_name: api
+    ports:
+      - "81:81"
+    env_file: .env
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - mongodb
+    volumes:
+      - ./api:/app
+    networks:
+      - tienda_network
+
+  webapp:
+    build:
+      context: ./webapp
+      dockerfile: Dockerfile
+    container_name: webapp
+    ports:
+      - "8080:80"
+    environment:
+      - NODE_ENV=development
+      - PORT=80
+    env_file: .env
+    volumes:
+      - ./webapp:/app
+      - /app/node_modules
+      - /app/.next
+    networks:
+      - tienda_network
+
+volumes:
+  mongodb_data_dev:
+
+
+networks:
+  tienda_network:
+    driver: bridge
