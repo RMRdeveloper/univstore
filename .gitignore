@@ -24,7 +24,3 @@ build/
 # IDE
 .vscode/
 .idea/
-
-# Storage
-api/storage/uploads/*
-!api/storage/uploads/.gitignore
