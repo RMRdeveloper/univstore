@@ -4,13 +4,13 @@ This project uses a containerized architecture with Docker.
 
 ## 🛠️ Technologies
 
-### Backend ([`api/`](file:///c:/xampp/htdocs/tienda/api))
+### Backend ([`api/`](../api))
 - **NestJS** (v11.0.1)
 - **Mongoose** (v9.1.3)
 - **Passport** (JWT & Local)
 - **TypeScript** (v5.7.3)
 
-### Frontend ([`webapp/`](file:///c:/xampp/htdocs/tienda/webapp))
+### Frontend ([`webapp/`](../webapp))
 - **Next.js** (v16.1.2)
 - **React** (v19.2.3)
 - **Tailwind CSS** (v4.x)
@@ -23,12 +23,12 @@ This project uses a containerized architecture with Docker.
 
 ## 📁 Key Directories
 
-### API (`/api/src`)
+### API (`api/src`)
 - `modules/`: Feature modules.
 - `config/`: Configuration (database, jwt, storage).
 - `common/`: Shared logic.
 
-### Webapp (`/webapp`)
+### Webapp (`webapp/app`)
 - `app/`: Next.js App Router (Auth, Admin, Protected, Public).
 - `components/`: UI components.
 - `lib/`: Utilities and API configuration.

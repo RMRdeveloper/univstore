@@ -1,6 +1,6 @@
 # UnivStore
 
-UnivStore is a project consisting of a NestJS backend and a Next.js frontend, integrated with Docker.
+UnivStore is a full-stack project consisting of a NestJS backend and a Next.js frontend, integrated with Docker.
 
 ## 🚀 Quick Start
 
@@ -23,15 +23,15 @@ UnivStore is a project consisting of a NestJS backend and a Next.js frontend, in
 
 | Directory | Description |
 |-----------|-------------|
-| [`api/`](file:///c:/xampp/htdocs/tienda/api) | NestJS Backend |
-| [`webapp/`](file:///c:/xampp/htdocs/tienda/webapp) | Next.js Frontend |
-| [`docs/`](file:///c:/xampp/htdocs/tienda/docs) | Project Documentation |
+| [`api/`](./api) | NestJS Backend |
+| [`webapp/`](./webapp) | Next.js Frontend |
+| [`docs/`](./docs) | Project Documentation |
 
 ## 📖 Documentation
 
-- [Project Overview](file:///c:/xampp/htdocs/tienda/docs/overview.md)
-- [Architecture & Tech Stack](file:///c:/xampp/htdocs/tienda/docs/architecture.md)
-- [Setup & Development Guide](file:///c:/xampp/htdocs/tienda/docs/setup.md)
+- [Project Overview](./docs/overview.md)
+- [Architecture & Tech Stack](./docs/architecture.md)
+- [Setup & Development Guide](./docs/setup.md)
 
 ---
 UnivStore

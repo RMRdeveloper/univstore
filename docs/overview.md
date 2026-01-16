@@ -4,7 +4,7 @@ UnivStore is a full-stack application with a NestJS API and a Next.js Webapp.
 
 ## 🏗️ Components
 
-### 1. Backend ([`api/`](file:///c:/xampp/htdocs/tienda/api))
+### 1. Backend ([`api/`](../api))
 A NestJS application providing a REST API. It includes the following modules:
 - Auth
 - Users
@@ -15,7 +15,7 @@ A NestJS application providing a REST API. It includes the following modules:
 - Search
 - Upload
 
-### 2. Frontend ([`webapp/`](file:///c:/xampp/htdocs/tienda/webapp))
+### 2. Frontend ([`webapp/`](../webapp))
 A Next.js application that consumes the API. It is organized using the App Router and includes:
 - Protected routes (Wishlist, etc.)
 - Public routes
