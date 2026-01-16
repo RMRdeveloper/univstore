@@ -9,7 +9,7 @@ services:
     volumes:
       - mongodb_data:/data/db
     networks:
-      - tienda_network
+      - univstore_network
 
   api:
     build:
@@ -27,7 +27,7 @@ services:
     depends_on:
       - mongodb
     networks:
-      - tienda_network
+      - univstore_network
 
   webapp:
     build:
@@ -44,7 +44,7 @@ services:
     depends_on:
       - api
     networks:
-      - tienda_network
+      - univstore_network
 
 volumes:
   mongodb_data:
@@ -52,5 +52,5 @@ volumes:
 
 
 networks:
-  tienda_network:
+  univstore_network:
     driver: bridge
