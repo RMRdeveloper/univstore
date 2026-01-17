@@ -80,6 +80,7 @@ export default function ProductDetailPage() {
               fill
               className="object-cover"
               priority
+              unoptimized
             />
             {hasDiscount && (
               <span className="absolute top-4 left-4 px-3 py-1 text-sm font-medium text-white bg-red-500 rounded">
@@ -98,9 +99,10 @@ export default function ProductDetailPage() {
                 >
                   <Image
                     src={getImageUrl(image)}
-                    alt={`${product.name} ${index + 1}`}
+                    alt={`${product.name} - Imagen ${index + 1}`}
                     fill
-                    className="object-cover"
+                    className="object-cover hover:scale-110 transition-transform duration-500"
+                    unoptimized
                   />
                 </button>
               ))}

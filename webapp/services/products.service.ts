@@ -1,5 +1,5 @@
 import { apiClient } from '@/lib';
-import type { Product, ProductQueryParams, PaginatedResult } from '@/types';
+import type { Product, ProductQueryParams, PaginatedResult, CreateProductDTO, UpdateProductDTO } from '@/types';
 
 export const productsService = {
   async getAll(params?: ProductQueryParams): Promise<PaginatedResult<Product>> {
@@ -19,11 +19,11 @@ export const productsService = {
     return apiClient.get<Product>(`/products/${id}`);
   },
 
-  async create(data: Partial<Product>): Promise<Product> {
+  async create(data: CreateProductDTO): Promise<Product> {
     return apiClient.post<Product>('/products', data);
   },
 
-  async update(id: string, data: Partial<Product>): Promise<Product> {
+  async update(id: string, data: UpdateProductDTO): Promise<Product> {
     return apiClient.patch<Product>(`/products/${id}`, data);
   },
 

@@ -17,10 +17,7 @@ import { CreateProductDto } from './dto/create-product.dto.js';
 import { UpdateProductDto } from './dto/update-product.dto.js';
 import { ProductQueryDto } from './dto/product-query.dto.js';
 import type { ProductDocument } from './schemas/product.schema.js';
-import { RolesGuard } from '../../common/guards/roles.guard.js';
-import { Roles } from '../../common/decorators/roles.decorator.js';
 import { ParseObjectIdPipe } from '../../common/pipes/parse-object-id.pipe.js';
-import { UserRole } from '../../common/enums/index.js';
 
 @Controller('products')
 export class ProductsController {
@@ -41,8 +38,7 @@ export class ProductsController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @UseGuards(AuthGuard('jwt'))
   async create(
     @Body() createProductDto: CreateProductDto,
   ): Promise<ProductDocument> {
@@ -50,8 +46,7 @@ export class ProductsController {
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @UseGuards(AuthGuard('jwt'))
   async update(
     @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
     @Body() updateProductDto: UpdateProductDto,
@@ -60,8 +55,7 @@ export class ProductsController {
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'), RolesGuard)
-  @Roles(UserRole.ADMIN)
+  @UseGuards(AuthGuard('jwt'))
   async delete(
     @Param('id', ParseObjectIdPipe) id: Types.ObjectId,
   ): Promise<void> {

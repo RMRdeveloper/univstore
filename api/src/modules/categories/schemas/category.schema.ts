@@ -3,7 +3,17 @@ import { HydratedDocument, Types } from 'mongoose';
 
 export type CategoryDocument = HydratedDocument<Category>;
 
-@Schema({ timestamps: true })
+@Schema({
+  timestamps: true,
+  toJSON: {
+    virtuals: true,
+    versionKey: false,
+    transform: function (doc, ret: any) {
+      ret.id = ret._id;
+      delete ret._id;
+    },
+  },
+})
 export class Category {
   @Prop({ required: true, trim: true })
   name!: string;

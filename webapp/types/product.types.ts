@@ -17,6 +17,21 @@ export interface Product {
   updatedAt: string;
 }
 
+export interface CreateProductDTO {
+  name: string;
+  description: string;
+  price: number;
+  compareAtPrice?: number;
+  images: string[];
+  category: string;
+  stock: number;
+  sku: string;
+  isActive?: boolean;
+  tags?: string[];
+}
+
+export type UpdateProductDTO = Partial<CreateProductDTO>;
+
 export interface ProductQueryParams {
   category?: string;
   minPrice?: number;

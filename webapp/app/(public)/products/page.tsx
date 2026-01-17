@@ -29,8 +29,8 @@ export default function ProductsPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Productos</h1>
-        <p className="text-gray-600 mt-2">
+        <h1 className="text-3xl font-bold text-foreground">Productos</h1>
+        <p className="text-muted-foreground mt-2">
           Explora nuestra selección de productos
         </p>
       </div>
@@ -54,7 +54,7 @@ export default function ProductsPage() {
               >
                 Anterior
               </Button>
-              <span className="flex items-center px-4 text-sm text-gray-600">
+              <span className="flex items-center px-4 text-sm text-muted-foreground">
                 Página {page} de {data.totalPages}
               </span>
               <Button

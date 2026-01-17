@@ -5,14 +5,21 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { LayoutDashboard, Package, FolderTree, Users, ArrowLeft } from 'lucide-react';
-import { useAuthStore, useIsAdmin } from '@/stores';
+import { useAuthStore } from '@/stores';
 import { cn } from '@/lib';
 
-const navItems = [
+interface NavItem {
+  href: string;
+  label: string;
+  icon: any;
+  roles?: string[];
+}
+
+const navItems: NavItem[] = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/products', label: 'Productos', icon: Package },
-  { href: '/admin/categories', label: 'Categorías', icon: FolderTree },
-  { href: '/admin/users', label: 'Usuarios', icon: Users },
+  { href: '/admin/categories', label: 'Categorías', icon: FolderTree, roles: ['admin'] },
+  { href: '/admin/users', label: 'Usuarios', icon: Users, roles: ['admin'] },
 ];
 
 export default function AdminLayout({
@@ -22,14 +29,13 @@ export default function AdminLayout({
 }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { isAuthenticated, isHydrated } = useAuthStore();
-  const isAdmin = useIsAdmin();
+  const { isAuthenticated, isHydrated, user } = useAuthStore();
 
   useEffect(() => {
-    if (isHydrated && (!isAuthenticated || !isAdmin)) {
-      router.push('/');
+    if (isHydrated && !isAuthenticated) {
+      router.push('/login');
     }
-  }, [isAuthenticated, isAdmin, isHydrated, router]);
+  }, [isAuthenticated, isHydrated, router]);
 
   if (!isHydrated) {
     return (
@@ -39,23 +45,32 @@ export default function AdminLayout({
     );
   }
 
-  if (!isAuthenticated || !isAdmin) {
+  if (!isAuthenticated) {
     return null;
   }
 
+
+  const filteredNavItems = navItems.filter((item) => {
+    if (!item.roles) return true;
+    return user?.role && item.roles.includes(user.role);
+  });
+
   return (
-    <div className="min-h-screen flex">
-      <aside className="w-64 bg-gray-900 text-white flex flex-col">
-        <div className="p-4 border-b border-gray-800">
-          <Link href="/" className="flex items-center gap-2 text-gray-400 hover:text-white text-sm">
-            <ArrowLeft className="h-4 w-4" />
+    <div className="min-h-screen flex font-sans light">
+      <aside className="w-64 bg-slate-900 text-white flex flex-col shrink-0">
+        <div className="p-4 border-b border-slate-800">
+          <Link href="/" className="flex items-center gap-2 text-slate-400 hover:text-white text-sm transition-colors group">
+            <ArrowLeft className="h-4 w-4 group-hover:-translate-x-1 transition-transform" />
             Volver a la tienda
           </Link>
-          <h1 className="mt-4 text-xl font-bold">Admin Panel</h1>
+          <h1 className="mt-4 text-xl font-bold tracking-tight">Admin Panel</h1>
+          <div className="mt-2 text-xs text-slate-500 font-mono">
+            {user?.email} ({user?.role})
+          </div>
         </div>
-        <nav className="flex-1 p-4">
+        <nav className="flex-1 p-4 overflow-y-auto">
           <ul className="space-y-1">
-            {navItems.map((item) => {
+            {filteredNavItems.map((item) => {
               const isActive = pathname === item.href ||
                 (item.href !== '/admin' && pathname.startsWith(item.href));
               return (
@@ -63,10 +78,10 @@ export default function AdminLayout({
                   <Link
                     href={item.href}
                     className={cn(
-                      'flex items-center gap-3 px-3 py-2 rounded-lg text-sm transition-colors',
+                      'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all',
                       isActive
-                        ? 'bg-blue-600 text-white'
-                        : 'text-gray-400 hover:text-white hover:bg-gray-800',
+                        ? 'bg-indigo-600 text-white shadow-md shadow-indigo-900/20'
+                        : 'text-slate-400 hover:text-white hover:bg-slate-800',
                     )}
                   >
                     <item.icon className="h-5 w-5" />
@@ -78,8 +93,8 @@ export default function AdminLayout({
           </ul>
         </nav>
       </aside>
-      <main className="flex-1 bg-gray-50">
-        <div className="p-8">{children}</div>
+      <main className="flex-1 bg-slate-50 overflow-auto">
+        <div className="max-w-7xl mx-auto p-8">{children}</div>
       </main>
     </div>
   );

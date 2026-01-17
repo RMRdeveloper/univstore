@@ -81,6 +81,7 @@ export default function WishlistPage() {
                   alt={product.name}
                   fill
                   className="object-cover"
+                  unoptimized
                 />
                 {!product.isActive && (
                   <div className="absolute inset-0 bg-black/50 flex items-center justify-center">

@@ -13,6 +13,6 @@ import { Category, CategorySchema } from './schemas/category.schema.js';
   ],
   controllers: [CategoriesController],
   providers: [CategoriesService, CategoriesRepository],
-  exports: [CategoriesService],
+  exports: [CategoriesService, CategoriesRepository],
 })
 export class CategoriesModule { }

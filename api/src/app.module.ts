@@ -1,3 +1,5 @@
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -15,6 +17,10 @@ import { UploadModule } from './modules/upload/upload.module.js';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'storage', 'uploads'),
+      serveRoot: '/storage/uploads',
+    }),
     ConfigModule.forRoot({
       isGlobal: true,
       load: [databaseConfig, jwtConfig, storageConfig],

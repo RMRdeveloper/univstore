@@ -40,7 +40,6 @@ export default function EditProductPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Editar Producto</h1>
       <ProductForm initialData={product} />
     </div>
   );

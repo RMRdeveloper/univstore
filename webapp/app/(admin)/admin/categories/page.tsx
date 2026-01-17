@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { categoriesService } from '@/services';
-import { Button, Card } from '@/components/ui';
+import { Button } from '@/components/ui';
 import type { Category } from '@/types';
 
 export default function AdminCategoriesPage() {
@@ -41,7 +41,7 @@ export default function AdminCategoriesPage() {
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-900">Categorías</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Categorías</h1>
         <Link href="/admin/categories/new">
           <Button>
             <Plus className="h-4 w-4 mr-2" />
@@ -50,40 +50,44 @@ export default function AdminCategoriesPage() {
         </Link>
       </div>
 
-      <Card>
+      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b">
+          <table className="w-full text-left">
+            <thead className="bg-slate-50 border-b border-slate-200">
               <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Slug</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Padre</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Orden</th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">Acciones</th>
+                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Nombre</th>
+                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Slug</th>
+                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Padre</th>
+                <th className="px-6 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">Orden</th>
+                <th className="px-6 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">Acciones</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-slate-100 bg-white">
               {isLoading ? (
                 Array.from({ length: 5 }).map((_, i) => (
                   <tr key={i}>
                     <td colSpan={5} className="px-6 py-4">
-                      <div className="h-8 bg-gray-100 rounded animate-pulse" />
+                      <div className="h-8 bg-slate-100 rounded animate-pulse" />
                     </td>
                   </tr>
                 ))
               ) : categories.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                  <td colSpan={5} className="px-6 py-8 text-center text-slate-500">
                     No hay categorías
                   </td>
                 </tr>
               ) : (
                 categories.map((category) => (
-                  <tr key={category.id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 font-medium text-gray-900">{category.name}</td>
-                    <td className="px-6 py-4 text-gray-600">{category.slug}</td>
-                    <td className="px-6 py-4 text-gray-600">{category.parent?.name || '-'}</td>
-                    <td className="px-6 py-4 text-gray-600">{category.order}</td>
+                  <tr key={category.id} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-6 py-4 font-medium text-slate-900">{category.name}</td>
+                    <td className="px-6 py-4 text-slate-600">{category.slug}</td>
+                    <td className="px-6 py-4 text-slate-600">{category.parent?.name || '-'}</td>
+                    <td className="px-6 py-4">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+                        {category.order}
+                      </span>
+                    </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex justify-end gap-2">
                         <Link href={`/admin/categories/${category.id}/edit`}>
@@ -102,7 +106,7 @@ export default function AdminCategoriesPage() {
             </tbody>
           </table>
         </div>
-      </Card>
+      </div>
     </div>
   );
 }

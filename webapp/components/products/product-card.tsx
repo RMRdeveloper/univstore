@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
-import { Heart } from 'lucide-react';
+import { Heart, ShoppingCart } from 'lucide-react';
 import { cn, formatPrice, getImageUrl } from '@/lib';
 import { Card } from '@/components/ui';
 import type { Product } from '@/types';
@@ -14,50 +14,83 @@ export function ProductCard({ product, className }: ProductCardProps) {
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
 
   return (
-    <Card className={cn('group overflow-hidden', className)}>
+    <div className={cn('group relative bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all duration-300', className)}>
       <Link href={`/products/${product.id}`} className="block">
-        <div className="relative aspect-square overflow-hidden bg-gray-100">
+        {/* Image Container with Padding */}
+        <div className="relative aspect-[4/5] bg-slate-50/50 p-6 overflow-hidden">
           <Image
             src={getImageUrl(product.images[0])}
             alt={product.name}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className="object-contain mix-blend-multiply group-hover:scale-110 transition-transform duration-500 ease-out"
+            unoptimized
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
-          {hasDiscount && (
-            <span className="absolute top-2 left-2 px-2 py-1 text-xs font-medium text-white bg-red-500 rounded">
-              Oferta
-            </span>
-          )}
-          {product.stock === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/50">
-              <span className="text-white font-medium">Agotado</span>
-            </div>
-          )}
+
+          {/* Badges */}
+          <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
+            {hasDiscount && (
+              <span className="px-3 py-1 text-[10px] font-bold text-white tracking-wider uppercase bg-rose-500 rounded-full shadow-sm">
+                -{Math.round(((product.compareAtPrice! - product.price) / product.compareAtPrice!) * 100)}%
+              </span>
+            )}
+            {product.stock === 0 && (
+              <span className="px-3 py-1 text-[10px] font-bold text-white tracking-wider uppercase bg-slate-900 rounded-full shadow-sm">
+                Agotado
+              </span>
+            )}
+          </div>
+
+          {/* Wishlist Button */}
+          <button
+            className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-white text-slate-400 hover:text-rose-500 hover:bg-rose-50 shadow-sm border border-slate-100 transition-all duration-300 z-20"
+            onClick={(e) => {
+              e.preventDefault();
+              // Wishlist logic
+            }}
+          >
+            <Heart className="w-4 h-4" />
+          </button>
+
+          {/* Full Width Button on Hover */}
+          <div className="absolute inset-x-4 bottom-4 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-20">
+            <button
+              className="w-full py-2.5 bg-slate-900 text-white font-semibold text-sm rounded-xl shadow-lg hover:bg-indigo-600 active:scale-95 transition-all flex items-center justify-center gap-2"
+              onClick={(e) => {
+                e.preventDefault();
+                console.log('Quick add', product.id);
+              }}
+            >
+              <ShoppingCart className="w-4 h-4" />
+              Agregar
+            </button>
+          </div>
         </div>
-        <div className="p-4">
-          <p className="text-xs text-gray-500 mb-1">{product.category.name}</p>
-          <h3 className="font-medium text-gray-900 line-clamp-2 mb-2">
+
+        {/* Content */}
+        <div className="p-5">
+          <div className="mb-3">
+            <span className="text-[10px] font-bold tracking-wider text-indigo-500 uppercase bg-indigo-50 px-2 py-1 rounded-md">
+              {product.category.name}
+            </span>
+          </div>
+
+          <h3 className="font-bold text-slate-900 text-lg leading-tight line-clamp-1 mb-1 group-hover:text-indigo-600 transition-colors">
             {product.name}
           </h3>
+
           <div className="flex items-center gap-2">
-            <span className="text-lg font-bold text-gray-900">
+            <span className="text-xl font-bold text-slate-900">
               {formatPrice(product.price)}
             </span>
             {hasDiscount && (
-              <span className="text-sm text-gray-500 line-through">
+              <span className="text-sm text-slate-400 line-through decoration-slate-300">
                 {formatPrice(product.compareAtPrice!)}
               </span>
             )}
           </div>
         </div>
       </Link>
-      <button
-        className="absolute top-2 right-2 p-2 text-gray-400 hover:text-red-500 bg-white/80 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-        aria-label="Agregar a favoritos"
-      >
-        <Heart className="h-4 w-4" />
-      </button>
-    </Card>
+    </div>
   );
 }
