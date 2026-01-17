@@ -75,7 +75,7 @@ export function CategoryDropdown() {
               {categories.map((category) => (
                 <Link
                   key={category.id}
-                  href={`/products?category=${category.slug}`}
+                  href={`/products?category=${category.id}`}
                   onClick={() => setIsOpen(false)}
                   className="block px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
                 >

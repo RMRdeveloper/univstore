@@ -1,2 +1,3 @@
-export { ProductCard } from './product-card';
-export { ProductGrid } from './product-grid';
+export * from './product-grid';
+export * from './product-card';
+export * from './product-filters';
