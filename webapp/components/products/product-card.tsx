@@ -4,6 +4,8 @@ import { Heart, ShoppingCart } from 'lucide-react';
 import { cn, formatPrice, getImageUrl } from '@/lib';
 import { Card } from '@/components/ui';
 import type { Product } from '@/types';
+import { useWishlistStore } from '@/stores/wishlist.store';
+import { useState, useCallback } from 'react';
 
 interface ProductCardProps {
   product: Product;
@@ -12,6 +14,27 @@ interface ProductCardProps {
 
 export function ProductCard({ product, className }: ProductCardProps) {
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlistStore();
+  const [isLoading, setIsLoading] = useState(false);
+  const inWishlist = isInWishlist(product.id);
+
+  const toggleWishlist = useCallback(async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    setIsLoading(true);
+    try {
+      if (inWishlist) {
+        await removeFromWishlist(product.id);
+      } else {
+        await addToWishlist(product.id);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [inWishlist, product.id, addToWishlist, removeFromWishlist]);
 
   return (
     <div className={cn('group relative bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all duration-300', className)}>
@@ -42,14 +65,22 @@ export function ProductCard({ product, className }: ProductCardProps) {
           </div>
 
           {/* Wishlist Button */}
+          {/* Wishlist Button */}
           <button
-            className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-white text-slate-400 hover:text-rose-500 hover:bg-rose-50 shadow-sm border border-slate-100 transition-all duration-300 z-20"
-            onClick={(e) => {
-              e.preventDefault();
-              // Wishlist logic
-            }}
+            className={cn(
+              "absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-white shadow-sm border border-slate-100 transition-all duration-300 z-20",
+              inWishlist
+                ? "text-rose-500 bg-rose-50 border-rose-100"
+                : "text-slate-400 hover:text-rose-500 hover:bg-rose-50"
+            )}
+            onClick={toggleWishlist}
+            disabled={isLoading}
           >
-            <Heart className="w-4 h-4" />
+            {isLoading ? (
+              <div className="w-4 h-4 border-2 border-slate-300 border-t-rose-500 rounded-full animate-spin" />
+            ) : (
+              <Heart className={cn("w-4 h-4", inWishlist && "fill-current")} />
+            )}
           </button>
 
           {/* Full Width Button on Hover */}
@@ -71,7 +102,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
         <div className="p-5">
           <div className="mb-3">
             <span className="text-[10px] font-bold tracking-wider text-indigo-500 uppercase bg-indigo-50 px-2 py-1 rounded-md">
-              {product.category.name}
+              {product.category?.name || 'Varios'}
             </span>
           </div>
 

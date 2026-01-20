@@ -42,11 +42,6 @@ export default function HomePage() {
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="/categories">
-              <Button size="lg" variant="outline" className="h-14 px-8 text-base border-slate-200 text-slate-600 hover:bg-white hover:text-indigo-600 hover:border-indigo-100 bg-white/50 backdrop-blur-sm w-full sm:w-auto">
-                Explorar Categorías
-              </Button>
-            </Link>
           </div>
         </div>
       </section>

@@ -5,9 +5,9 @@ import { useParams } from 'next/navigation';
 import Image from 'next/image';
 import { Heart, Minus, Plus, ShoppingCart } from 'lucide-react';
 import { productsService } from '@/services';
-import { useCartStore, useAuthStore } from '@/stores';
+import { useCartStore, useAuthStore, useWishlistStore } from '@/stores';
 import { Button } from '@/components/ui';
-import { formatPrice, getImageUrl } from '@/lib';
+import { formatPrice, getImageUrl, cn } from '@/lib';
 import type { Product } from '@/types';
 
 import { ChevronRight, ShieldCheck, Truck, RotateCcw, ZoomIn } from 'lucide-react';
@@ -23,6 +23,26 @@ export default function ProductDetailPage() {
   const [isViewerOpen, setIsViewerOpen] = useState(false);
   const { addItem, isLoading: isAddingToCart } = useCartStore();
   const { isAuthenticated } = useAuthStore();
+  const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlistStore();
+  const [isWishlistLoading, setIsWishlistLoading] = useState(false);
+  const inWishlist = product ? isInWishlist(product.id) : false;
+
+  const toggleWishlist = async () => {
+    if (!product || !isAuthenticated) return;
+
+    setIsWishlistLoading(true);
+    try {
+      if (inWishlist) {
+        await removeFromWishlist(product.id);
+      } else {
+        await addToWishlist(product.id);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsWishlistLoading(false);
+    }
+  };
 
   useEffect(() => {
     async function fetchProduct() {
@@ -217,8 +237,24 @@ export default function ProductDetailPage() {
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   {product.stock === 0 ? 'Agotado' : 'Agregar al Carrito'}
                 </Button>
-                <Button size="lg" variant="outline" className="h-14 w-14 p-0 rounded-xl border-slate-200">
-                  <Heart className="h-5 w-5 text-slate-400 hover:text-rose-500 transition-colors" />
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className={cn(
+                    "h-14 w-14 p-0 rounded-xl border-slate-200 transition-colors",
+                    inWishlist && "bg-rose-50 border-rose-100"
+                  )}
+                  onClick={toggleWishlist}
+                  disabled={isWishlistLoading || !isAuthenticated}
+                >
+                  {isWishlistLoading ? (
+                    <div className="w-5 h-5 border-2 border-slate-300 border-t-rose-500 rounded-full animate-spin" />
+                  ) : (
+                    <Heart className={cn(
+                      "h-5 w-5 transition-colors",
+                      inWishlist ? "text-rose-500 fill-current" : "text-slate-400 hover:text-rose-500"
+                    )} />
+                  )}
                 </Button>
               </div>
 

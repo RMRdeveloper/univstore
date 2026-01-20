@@ -13,7 +13,11 @@ export class WishlistRepository {
   async findByUser(userId: Types.ObjectId): Promise<WishlistDocument | null> {
     return this.wishlistModel
       .findOne({ user: userId })
-      .populate('products', 'name slug price images stock isActive')
+      .populate({
+        path: 'products',
+        select: 'name slug price images stock isActive category',
+        populate: { path: 'category', select: 'name slug' },
+      })
       .exec();
   }
 
@@ -43,7 +47,11 @@ export class WishlistRepository {
 
     return this.wishlistModel
       .findById(wishlist._id)
-      .populate('products', 'name slug price images stock isActive')
+      .populate({
+        path: 'products',
+        select: 'name slug price images stock isActive category',
+        populate: { path: 'category', select: 'name slug' },
+      })
       .exec() as Promise<WishlistDocument>;
   }
 
@@ -61,7 +69,11 @@ export class WishlistRepository {
 
     return this.wishlistModel
       .findById(wishlist._id)
-      .populate('products', 'name slug price images stock isActive')
+      .populate({
+        path: 'products',
+        select: 'name slug price images stock isActive category',
+        populate: { path: 'category', select: 'name slug' },
+      })
       .exec();
   }
 

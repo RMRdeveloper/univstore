@@ -1,0 +1,30 @@
+
+> api@1.0.0 test
+> jest src/modules/wishlist/wishlist.controller.spec.ts
+
+FAIL src/modules/wishlist/wishlist.controller.spec.ts
+  ● Test suite failed to run
+
+    Cannot find module './wishlist.service.js' from 'modules/wishlist/wishlist.controller.ts'
+
+    Require stack:
+      modules/wishlist/wishlist.controller.ts
+      modules/wishlist/wishlist.controller.spec.ts
+
+    [0m [90m  9 |[39m [36mimport[39m { [33mAuthGuard[39m } [36mfrom[39m [32m'@nestjs/passport'[39m[33m;[39m
+     [90m 10 |[39m [36mimport[39m { [33mTypes[39m } [36mfrom[39m [32m'mongoose'[39m[33m;[39m
+    [31m[1m>[22m[39m[90m 11 |[39m [36mimport[39m { [33mWishlistService[39m } [36mfrom[39m [32m'./wishlist.service.js'[39m[33m;[39m
+     [90m    |[39m [31m[1m^[22m[39m
+     [90m 12 |[39m [36mimport[39m type { [33mWishlistDocument[39m } [36mfrom[39m [32m'./schemas/wishlist.schema.js'[39m[33m;[39m
+     [90m 13 |[39m [36mimport[39m { [33mCurrentUser[39m } [36mfrom[39m [32m'../../common/decorators/current-user.decorator.js'[39m[33m;[39m
+     [90m 14 |[39m [36mimport[39m { [33mParseObjectIdPipe[39m } [36mfrom[39m [32m'../../common/pipes/parse-object-id.pipe.js'[39m[33m;[39m[0m
+
+      at Resolver._throwModNotFoundError (../node_modules/jest-resolve/build/index.js:863:11)
+      at Object.<anonymous> (modules/wishlist/wishlist.controller.ts:11:1)
+      at Object.<anonymous> (modules/wishlist/wishlist.controller.spec.ts:2:1)
+
+Test Suites: 1 failed, 1 total
+Tests:       0 total
+Snapshots:   0 total
+Time:        1.143 s
+Ran all test suites matching src/modules/wishlist/wishlist.controller.spec.ts.

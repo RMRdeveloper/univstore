@@ -13,9 +13,3 @@ export interface Cart {
   updatedAt: string;
 }
 
-export interface Wishlist {
-  id: string;
-  products: Pick<Product, 'id' | 'name' | 'slug' | 'price' | 'images' | 'stock' | 'isActive'>[];
-  createdAt: string;
-  updatedAt: string;
-}
