@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import { useWishlistStore } from '@/stores/wishlist.store';
-import { ProductCard } from '@/components/products/product-card'; // Verify import path
+import { ProductCard } from '@/components/products/product-card';
 import { Loader2 } from 'lucide-react';
 
 export default function WishlistPage() {

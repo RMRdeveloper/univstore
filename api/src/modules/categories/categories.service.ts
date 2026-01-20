@@ -1,7 +1,6 @@
 import {
   Injectable,
   NotFoundException,
-  ConflictException,
   BadRequestException,
 } from '@nestjs/common';
 import { Types } from 'mongoose';
@@ -54,35 +53,7 @@ export class CategoriesService {
   ): Promise<CategoryDocument> {
     if (updateCategoryDto.name) {
       const slug = await this.getUniqueSlug(updateCategoryDto.name, id);
-      // We don't need to check for existence here because getUniqueSlug guarantees uniqueness
-      // But we need to update the dto with the new slug? 
-      // The current update logic in repository likely takes the whole object.
-      // Wait, the repository update method takes existing DTO.
-      // I need to inject the slug into the update process. 
-      // The repository update logic:
-      /*
-      async update(id, updateCategoryDto) {
-        const updateData = { ...updateCategoryDto };
-        ...
-        return this.categoryModel.findByIdAndUpdate(id, updateData, ...);
-      }
-      */
-      // So I can't just pass slug separately unless I modify DTO or Repository.
-      // Easiest is to cast or modify the DTO object before passing, but DTO is typed.
-      // Or I can add 'slug' to updateCategoryDto if it allows, but it doesn't seem to based on typical NestJS mapped-types.
-      // Let's modify the repository call if needed or just pass it as part of a modified object.
-      // Actually, standard practice: pass a new object.
-
       const updateData = { ...updateCategoryDto, slug };
-      // Passing updateData which counts as UpdateCategoryDto if it overlaps sufficient properties?
-      // No, UpdateCategoryDto probably doesn't have 'slug'.
-      // Let's check UpdateCategoryDto definition later, but usually slug is auto-generated.
-      // I will assume I can pass it to repository.update which takes UpdateCategoryDto. 
-      // If UpdateCategoryDto is strict, I might need to cast or change repository signature. 
-      // Looking at repository: `updateCategoryDto: UpdateCategoryDto`
-      // `const updateData: Record<string, unknown> = { ...updateCategoryDto };`
-      // It copies properties. So if I pass an object with slug, it will be copied.
-      // So I will cast it as any or intersection.
       const category = await this.categoriesRepository.update(id, updateData as any);
       if (!category) {
         throw new NotFoundException('Category not found');
@@ -121,7 +92,6 @@ export class CategoriesService {
     if (!exists) {
       return slug;
     }
-    // Append unique suffix
     return `${slug}-${crypto.randomUUID().split('-')[0]}`;
   }
 }
