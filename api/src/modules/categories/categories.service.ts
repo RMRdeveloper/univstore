@@ -16,13 +16,7 @@ export class CategoriesService {
   constructor(private readonly categoriesRepository: CategoriesRepository) { }
 
   async create(createCategoryDto: CreateCategoryDto): Promise<CategoryDocument> {
-    const slug = this.generateSlug(createCategoryDto.name);
-
-    const slugExists = await this.categoriesRepository.existsBySlug(slug);
-    if (slugExists) {
-      throw new ConflictException('A category with this name already exists');
-    }
-
+    const slug = await this.getUniqueSlug(createCategoryDto.name);
     return this.categoriesRepository.create({ ...createCategoryDto, slug });
   }
 
@@ -59,11 +53,41 @@ export class CategoriesService {
     updateCategoryDto: UpdateCategoryDto,
   ): Promise<CategoryDocument> {
     if (updateCategoryDto.name) {
-      const slug = this.generateSlug(updateCategoryDto.name);
-      const slugExists = await this.categoriesRepository.existsBySlug(slug, id);
-      if (slugExists) {
-        throw new ConflictException('A category with this name already exists');
+      const slug = await this.getUniqueSlug(updateCategoryDto.name, id);
+      // We don't need to check for existence here because getUniqueSlug guarantees uniqueness
+      // But we need to update the dto with the new slug? 
+      // The current update logic in repository likely takes the whole object.
+      // Wait, the repository update method takes existing DTO.
+      // I need to inject the slug into the update process. 
+      // The repository update logic:
+      /*
+      async update(id, updateCategoryDto) {
+        const updateData = { ...updateCategoryDto };
+        ...
+        return this.categoryModel.findByIdAndUpdate(id, updateData, ...);
       }
+      */
+      // So I can't just pass slug separately unless I modify DTO or Repository.
+      // Easiest is to cast or modify the DTO object before passing, but DTO is typed.
+      // Or I can add 'slug' to updateCategoryDto if it allows, but it doesn't seem to based on typical NestJS mapped-types.
+      // Let's modify the repository call if needed or just pass it as part of a modified object.
+      // Actually, standard practice: pass a new object.
+
+      const updateData = { ...updateCategoryDto, slug };
+      // Passing updateData which counts as UpdateCategoryDto if it overlaps sufficient properties?
+      // No, UpdateCategoryDto probably doesn't have 'slug'.
+      // Let's check UpdateCategoryDto definition later, but usually slug is auto-generated.
+      // I will assume I can pass it to repository.update which takes UpdateCategoryDto. 
+      // If UpdateCategoryDto is strict, I might need to cast or change repository signature. 
+      // Looking at repository: `updateCategoryDto: UpdateCategoryDto`
+      // `const updateData: Record<string, unknown> = { ...updateCategoryDto };`
+      // It copies properties. So if I pass an object with slug, it will be copied.
+      // So I will cast it as any or intersection.
+      const category = await this.categoriesRepository.update(id, updateData as any);
+      if (!category) {
+        throw new NotFoundException('Category not found');
+      }
+      return category;
     }
 
     if (updateCategoryDto.parent === id.toString()) {
@@ -91,7 +115,13 @@ export class CategoriesService {
     }
   }
 
-  private generateSlug(name: string): string {
-    return slugify(name, { lower: true, strict: true });
+  private async getUniqueSlug(name: string, excludeId?: Types.ObjectId): Promise<string> {
+    const slug = slugify(name, { lower: true, strict: true });
+    const exists = await this.categoriesRepository.existsBySlug(slug, excludeId);
+    if (!exists) {
+      return slug;
+    }
+    // Append unique suffix
+    return `${slug}-${crypto.randomUUID().split('-')[0]}`;
   }
 }

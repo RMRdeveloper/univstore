@@ -19,12 +19,7 @@ export class ProductsService {
   constructor(private readonly productsRepository: ProductsRepository) { }
 
   async create(createProductDto: CreateProductDto): Promise<ProductDocument> {
-    const slug = this.generateSlug(createProductDto.name);
-
-    const slugExists = await this.productsRepository.existsBySlug(slug);
-    if (slugExists) {
-      throw new ConflictException('A product with this name already exists');
-    }
+    const slug = await this.getUniqueSlug(createProductDto.name);
 
     const skuExists = await this.productsRepository.existsBySku(createProductDto.sku);
     if (skuExists) {
@@ -67,12 +62,11 @@ export class ProductsService {
     id: Types.ObjectId,
     updateProductDto: UpdateProductDto,
   ): Promise<ProductDocument> {
+    const updateData: Record<string, any> = { ...updateProductDto };
+
     if (updateProductDto.name) {
-      const slug = this.generateSlug(updateProductDto.name);
-      const slugExists = await this.productsRepository.existsBySlug(slug, id);
-      if (slugExists) {
-        throw new ConflictException('A product with this name already exists');
-      }
+      const slug = await this.getUniqueSlug(updateProductDto.name, id);
+      updateData.slug = slug;
     }
 
     if (updateProductDto.sku) {
@@ -85,7 +79,7 @@ export class ProductsService {
       }
     }
 
-    const product = await this.productsRepository.update(id, updateProductDto);
+    const product = await this.productsRepository.update(id, updateData as any);
     if (!product) {
       throw new NotFoundException('Product not found');
     }
@@ -99,7 +93,12 @@ export class ProductsService {
     }
   }
 
-  private generateSlug(name: string): string {
-    return slugify(name, { lower: true, strict: true });
+  private async getUniqueSlug(name: string, excludeId?: Types.ObjectId): Promise<string> {
+    const slug = slugify(name, { lower: true, strict: true });
+    const exists = await this.productsRepository.existsBySlug(slug, excludeId);
+    if (!exists) {
+      return slug;
+    }
+    return `${slug}-${crypto.randomUUID().split('-')[0]}`;
   }
 }
