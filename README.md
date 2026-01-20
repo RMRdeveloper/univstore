@@ -32,6 +32,7 @@ UnivStore is a full-stack project consisting of a NestJS backend and a Next.js f
 - [Project Overview](./docs/overview.md)
 - [Architecture & Tech Stack](./docs/architecture.md)
 - [Setup & Development Guide](./docs/setup.md)
+- [Changelog](./docs/changelog.md)
 
 ---
 UnivStore
