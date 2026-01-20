@@ -43,7 +43,7 @@ export default function AdminDashboardPage() {
 
   return (
     <div>
-      <h1 className="text-2xl font-bold text-gray-900 mb-6">Dashboard</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-6">Dashboard</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {statCards.map((stat) => (
@@ -54,8 +54,8 @@ export default function AdminDashboardPage() {
                   <stat.icon className="h-6 w-6 text-white" />
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">{stat.label}</p>
-                  <p className="text-2xl font-bold text-gray-900">
+                  <p className="text-sm text-gray-500 dark:text-gray-400">{stat.label}</p>
+                  <p className="text-2xl font-bold text-gray-900 dark:text-gray-50">
                     {isLoading ? '...' : stat.value}
                   </p>
                 </div>
@@ -68,8 +68,8 @@ export default function AdminDashboardPage() {
       <div className="mt-8">
         <Card>
           <CardContent className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Bienvenido al Panel de Administración</h2>
-            <p className="text-gray-600">
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-50 mb-4">Bienvenido al Panel de Administración</h2>
+            <p className="text-gray-600 dark:text-gray-400">
               Desde aquí puedes gestionar productos, categorías y usuarios de la tienda.
             </p>
           </CardContent>
