@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { categoriesService } from '@/services';
 import { Button, Input, Card, CardContent, CardHeader } from '@/components/ui';
 import type { Category } from '@/types';
@@ -60,13 +61,16 @@ export function CategoryForm({ initialData }: CategoryFormProps) {
     try {
       if (initialData) {
         await categoriesService.update(initialData.id, payload);
+        toast.success('Categoría actualizada exitosamente');
       } else {
         await categoriesService.create(payload);
+        toast.success('Categoría creada exitosamente');
       }
       router.push('/admin/categories');
       router.refresh();
     } catch {
       setError(`Error al ${initialData ? 'actualizar' : 'crear'} la categoría`);
+      toast.error(`Error al ${initialData ? 'actualizar' : 'crear'} la categoría`);
     } finally {
       setIsSubmitting(false);
     }

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import { useAuthStore } from '@/stores';
 import { Button, Input } from '@/components/ui';
 
@@ -44,9 +45,11 @@ export default function RegisterPage() {
         email: data.email,
         password: data.password,
       });
+      toast.success('Cuenta creada exitosamente');
       router.push('/');
     } catch {
       setError('Error al crear la cuenta');
+      toast.error('Error al crear la cuenta');
     }
   };
 

@@ -1,13 +1,13 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { productsService, searchService } from '@/services';
 import { ProductGrid, ProductFilters } from '@/components/products';
 import { Button } from '@/components/ui';
 import type { Product, PaginatedResult } from '@/types';
 
-export default function ProductsPage() {
+function ProductsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -31,7 +31,7 @@ export default function ProductsPage() {
           category: categoryId || undefined,
           minPrice,
           maxPrice,
-          inStock: true // Default to showing in-stock items? Or typically a filter. Leaving explicit.
+          inStock: true
         };
 
         if (q) {
@@ -116,5 +116,13 @@ export default function ProductsPage() {
         </>
       )}
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Cargando...</div>}>
+      <ProductsContent />
+    </Suspense>
   );
 }

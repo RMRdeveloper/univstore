@@ -17,6 +17,8 @@ export const metadata: Metadata = {
   description: 'Tu tienda universitaria de confianza',
 };
 
+import { Toaster } from '@/components/ui';
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -26,6 +28,7 @@ export default function RootLayout({
     <html lang="es">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
         {children}
+        <Toaster />
       </body>
     </html>
   );

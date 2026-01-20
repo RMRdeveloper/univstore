@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { toast } from 'sonner';
 import { useAuthStore } from '@/stores';
 import { Button, Input } from '@/components/ui';
 
@@ -33,9 +34,11 @@ export default function LoginPage() {
     setError('');
     try {
       await login(data);
+      toast.success('Sesión iniciada correctamente');
       router.push('/');
     } catch {
       setError('Credenciales inválidas');
+      toast.error('Error al iniciar sesión');
     }
   };
 

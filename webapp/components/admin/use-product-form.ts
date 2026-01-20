@@ -1,5 +1,6 @@
 import { useState, useEffect, type FormEvent } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 import { productsService, categoriesService } from '@/services';
 import { apiClient } from '@/lib';
 import type { Product, Category, CreateProductDTO } from '@/types';
@@ -98,8 +99,10 @@ export function useProductForm({ initialData }: UseProductFormProps) {
 
       if (initialData) {
         await productsService.update(initialData.id, payload);
+        toast.success('Producto actualizado exitosamente');
       } else {
         await productsService.create(payload);
+        toast.success('Producto creado exitosamente');
       }
 
       router.push('/admin/products');
@@ -107,6 +110,7 @@ export function useProductForm({ initialData }: UseProductFormProps) {
     } catch (err: any) {
       console.error(err);
       setError(err.message || `Error al ${initialData ? 'actualizar' : 'crear'} el producto`);
+      toast.error(err.message || `Error al ${initialData ? 'actualizar' : 'crear'} el producto`);
     } finally {
       setIsSubmitting(false);
     }

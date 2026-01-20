@@ -6,6 +6,7 @@ import { Card } from '@/components/ui';
 import type { Product } from '@/types';
 import { useWishlistStore } from '@/stores/wishlist.store';
 import { useState, useCallback } from 'react';
+import { toast } from 'sonner';
 
 interface ProductCardProps {
   product: Product;
@@ -26,11 +27,14 @@ export function ProductCard({ product, className }: ProductCardProps) {
     try {
       if (inWishlist) {
         await removeFromWishlist(product.id);
+        toast.success('Eliminado de la lista de deseos');
       } else {
         await addToWishlist(product.id);
+        toast.success('Agregado a la lista de deseos');
       }
     } catch (error) {
       console.error(error);
+      toast.error('Ocurrió un error al actualizar la lista de deseos');
     } finally {
       setIsLoading(false);
     }

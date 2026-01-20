@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { User, Mail, LogOut } from 'lucide-react';
+import { toast } from 'sonner';
 import { useAuthStore } from '@/stores';
 import { Button, Card, CardContent, CardHeader } from '@/components/ui';
 
@@ -11,6 +12,7 @@ export default function ProfilePage() {
 
   const handleLogout = () => {
     logout();
+    toast.success('Sesión cerrada correctamente');
     router.push('/');
   };
 
