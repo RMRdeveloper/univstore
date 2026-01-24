@@ -14,6 +14,7 @@ import { CartModule } from './modules/cart/cart.module.js';
 import { WishlistModule } from './modules/wishlist/wishlist.module.js';
 import { SearchModule } from './modules/search/search.module.js';
 import { UploadModule } from './modules/upload/upload.module.js';
+import { SeedModule } from './database/seed/seed.module.js';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { UploadModule } from './modules/upload/upload.module.js';
     WishlistModule,
     SearchModule,
     UploadModule,
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [AppService],

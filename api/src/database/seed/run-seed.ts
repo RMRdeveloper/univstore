@@ -1,13 +1,13 @@
 import { NestFactory } from '@nestjs/core';
-import { SeedModule } from './seed.module.js';
-import { SeedService } from './seed.service.js';
+import { StandaloneSeedModule } from './standalone-seed.module.js';
 
 async function bootstrap() {
-  const app = await NestFactory.createApplicationContext(SeedModule);
-  const seedService = app.get(SeedService);
+  const app = await NestFactory.createApplicationContext(StandaloneSeedModule);
+
 
   try {
-    await seedService.seedCategories();
+    // Seed is now executed automatically on application bootstrap
+    console.log('Seed process initiated...');
   } catch (error) {
     console.error('Seed failed:', error);
     process.exit(1);

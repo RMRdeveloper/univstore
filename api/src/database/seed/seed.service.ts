@@ -1,17 +1,21 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model, Types } from 'mongoose';
 import { Category, CategoryDocument } from '../../modules/categories/schemas/category.schema.js';
 import { categoriesSeed } from './data/categories.seed.js';
 
 @Injectable()
-export class SeedService {
+export class SeedService implements OnApplicationBootstrap {
   private readonly logger = new Logger(SeedService.name);
 
   constructor(
     @InjectModel(Category.name)
     private readonly categoryModel: Model<CategoryDocument>,
   ) { }
+
+  async onApplicationBootstrap() {
+    await this.seedCategories();
+  }
 
   async seedCategories(): Promise<void> {
     this.logger.log('Starting categories seed...');
@@ -22,6 +26,7 @@ export class SeedService {
 
     this.logger.log('Categories seed completed successfully');
   }
+
 
   private async createCategoryWithChildren(
     categoryData: {
@@ -38,30 +43,25 @@ export class SeedService {
     },
     parentId?: Types.ObjectId,
   ): Promise<void> {
-    const existingCategory = await this.categoryModel.findOne({
+    const categoryDataToSave: Record<string, unknown> = {
+      name: categoryData.name,
       slug: categoryData.slug,
-    });
+      description: categoryData.description,
+      order: categoryData.order,
+      isActive: true,
+    };
 
-    let categoryId: Types.ObjectId;
-
-    if (existingCategory) {
-      this.logger.log(`Category "${categoryData.name}" already exists, skipping...`);
-      categoryId = existingCategory._id as Types.ObjectId;
-    } else {
-      const categoryCreateData: Record<string, unknown> = {
-        name: categoryData.name,
-        slug: categoryData.slug,
-        description: categoryData.description,
-        order: categoryData.order,
-        isActive: true,
-      };
-      if (parentId) {
-        categoryCreateData.parent = parentId;
-      }
-      const newCategory = await this.categoryModel.create(categoryCreateData);
-      categoryId = newCategory._id as Types.ObjectId;
-      this.logger.log(`Created category: ${categoryData.name}`);
+    if (parentId) {
+      categoryDataToSave.parent = parentId;
     }
+
+    const category = await this.categoryModel.findOneAndUpdate(
+      { slug: categoryData.slug },
+      { $set: categoryDataToSave },
+      { upsert: true, new: true, lean: false },
+    );
+
+    const categoryId = category._id as Types.ObjectId;
 
     if (categoryData.children) {
       for (const child of categoryData.children) {
