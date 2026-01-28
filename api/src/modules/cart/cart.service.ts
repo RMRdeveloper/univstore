@@ -9,13 +9,13 @@ import { ProductsService } from '../products/products.service.js';
 import { AddToCartDto } from './dto/add-to-cart.dto.js';
 import { UpdateCartItemDto } from './dto/update-cart-item.dto.js';
 import type { CartDocument } from './schemas/cart.schema.js';
-
+import { PopulatedCartItem } from './interfaces/populated-cart-item.interface.js';
 @Injectable()
 export class CartService {
   constructor(
     private readonly cartRepository: CartRepository,
     private readonly productsService: ProductsService,
-  ) { }
+  ) {}
 
   async getCart(userId: Types.ObjectId): Promise<CartDocument | null> {
     return this.cartRepository.findByUser(userId);
@@ -73,7 +73,21 @@ export class CartService {
     }
     return cart;
   }
+  async calculateTotal(userId: Types.ObjectId): Promise<number> {
+    const cart = await this.cartRepository.findByUser(userId);
 
+    if (!cart || !cart.items.length) {
+      return 0;
+    }
+
+    const total = cart.items.reduce((sum, item) => {
+      const populatedItem = item as unknown as PopulatedCartItem;
+
+      return sum + populatedItem.product.price * populatedItem.quantity;
+    }, 0);
+
+    return total;
+  }
   async clearCart(userId: Types.ObjectId): Promise<CartDocument> {
     const cart = await this.cartRepository.clear(userId);
     if (!cart) {

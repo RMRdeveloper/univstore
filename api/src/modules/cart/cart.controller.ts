@@ -16,18 +16,13 @@ import { UpdateCartItemDto } from './dto/update-cart-item.dto.js';
 import type { CartDocument } from './schemas/cart.schema.js';
 import { CurrentUser } from '../../common/decorators/current-user.decorator.js';
 import { ParseObjectIdPipe } from '../../common/pipes/parse-object-id.pipe.js';
-import { UserRole } from '../../common/enums/index.js';
 
-interface JwtPayload {
-  sub: Types.ObjectId;
-  email: string;
-  role: UserRole;
-}
+import type { JwtPayload } from './interfaces';
 
 @Controller('cart')
 @UseGuards(AuthGuard('jwt'))
 export class CartController {
-  constructor(private readonly cartService: CartService) { }
+  constructor(private readonly cartService: CartService) {}
 
   @Get()
   async getCart(@CurrentUser() user: JwtPayload): Promise<CartDocument | null> {

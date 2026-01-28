@@ -15,6 +15,7 @@ import { WishlistModule } from './modules/wishlist/wishlist.module.js';
 import { SearchModule } from './modules/search/search.module.js';
 import { UploadModule } from './modules/upload/upload.module.js';
 import { SeedModule } from './database/seed/seed.module.js';
+import { PaymentsModule } from './modules/payments/payments.module.js';
 
 @Module({
   imports: [
@@ -43,8 +44,9 @@ import { SeedModule } from './database/seed/seed.module.js';
     SearchModule,
     UploadModule,
     SeedModule,
+    PaymentsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule { }
+export class AppModule {}

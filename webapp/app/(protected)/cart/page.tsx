@@ -1,15 +1,24 @@
-'use client';
+"use client";
 
-import { useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
-import { Trash2, Minus, Plus, ShoppingBag } from 'lucide-react';
-import { useCartStore, useAuthStore } from '@/stores';
-import { Button, Card } from '@/components/ui';
-import { formatPrice, getImageUrl } from '@/lib';
+import { useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { Trash2, Minus, Plus, ShoppingBag } from "lucide-react";
+import { useCartStore, useAuthStore } from "@/stores";
+import { Button, Card } from "@/components/ui";
+import { formatPrice, getImageUrl } from "@/lib";
 
 export default function CartPage() {
-  const { cart, isLoading, itemCount, total, fetchCart, updateItem, removeItem, clearCart } = useCartStore();
+  const {
+    cart,
+    isLoading,
+    itemCount,
+    total,
+    fetchCart,
+    updateItem,
+    removeItem,
+    clearCart,
+  } = useCartStore();
   const { isAuthenticated } = useAuthStore();
 
   useEffect(() => {
@@ -23,7 +32,10 @@ export default function CartPage() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="space-y-4">
           {Array.from({ length: 3 }).map((_, i) => (
-            <div key={i} className="h-24 bg-gray-100 rounded-xl animate-pulse" />
+            <div
+              key={i}
+              className="h-24 bg-gray-100 rounded-xl animate-pulse"
+            />
           ))}
         </div>
       </div>
@@ -34,7 +46,9 @@ export default function CartPage() {
     return (
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
         <ShoppingBag className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-        <h1 className="text-2xl font-bold text-gray-900 mb-2">Tu carrito está vacío</h1>
+        <h1 className="text-2xl font-bold text-gray-900 mb-2">
+          Tu carrito está vacío
+        </h1>
         <p className="text-gray-600 mb-8">Agrega productos para comenzar</p>
         <Link href="/products">
           <Button>Ver Productos</Button>
@@ -46,7 +60,9 @@ export default function CartPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">Carrito ({itemCount})</h1>
+        <h1 className="text-3xl font-bold text-gray-900">
+          Carrito ({itemCount})
+        </h1>
         <Button variant="ghost" onClick={() => clearCart()}>
           Vaciar Carrito
         </Button>
@@ -67,7 +83,10 @@ export default function CartPage() {
                   />
                 </div>
                 <div className="flex-1">
-                  <Link href={`/products/${item.product.id}`} className="font-medium text-gray-900 hover:text-blue-600">
+                  <Link
+                    href={`/products/${item.product.id}`}
+                    className="font-medium text-gray-900 hover:text-blue-600"
+                  >
                     {item.product.name}
                   </Link>
                   <p className="text-lg font-bold text-gray-900 mt-1">
@@ -76,7 +95,12 @@ export default function CartPage() {
                   <div className="flex items-center gap-4 mt-2">
                     <div className="flex items-center border border-gray-300 rounded-lg">
                       <button
-                        onClick={() => updateItem(item.product.id, Math.max(1, item.quantity - 1))}
+                        onClick={() =>
+                          updateItem(
+                            item.product.id,
+                            Math.max(1, item.quantity - 1),
+                          )
+                        }
                         className="p-1 hover:bg-gray-100"
                         disabled={item.quantity <= 1}
                       >
@@ -84,7 +108,12 @@ export default function CartPage() {
                       </button>
                       <span className="px-3 text-sm">{item.quantity}</span>
                       <button
-                        onClick={() => updateItem(item.product.id, Math.min(item.product.stock, item.quantity + 1))}
+                        onClick={() =>
+                          updateItem(
+                            item.product.id,
+                            Math.min(item.product.stock, item.quantity + 1),
+                          )
+                        }
                         className="p-1 hover:bg-gray-100"
                         disabled={item.quantity >= item.product.stock}
                       >
@@ -126,9 +155,9 @@ export default function CartPage() {
                 <span className="font-bold text-lg">{formatPrice(total)}</span>
               </div>
             </div>
-            <Button className="w-full mt-6" size="lg">
-              Proceder al Pago
-            </Button>
+            <Link href="/checkout">
+              <Button className="w-full mt-4">Proceder al Pago</Button>
+            </Link>
           </Card>
         </div>
       </div>
