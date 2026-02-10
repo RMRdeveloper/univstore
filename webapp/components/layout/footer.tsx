@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+/** Pie de página con enlaces de navegación, cuenta y contacto. */
 export function Footer() {
   return (
     <footer className="bg-slate-950 text-slate-300 mt-auto border-t border-slate-800">
@@ -8,7 +9,7 @@ export function Footer() {
           <div>
             <h3 className="text-lg font-bold text-white mb-4 bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent">UnivStore</h3>
             <p className="text-sm text-slate-400 leading-relaxed">
-              Tu tienda universitaria de confianza para encontrar todo lo que necesitas con la mejor calidad.
+              Tu tienda de confianza para encontrar todo lo que necesitas con la mejor calidad.
             </p>
           </div>
 

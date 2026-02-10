@@ -13,13 +13,17 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Tienda | Universidad',
-  description: 'Tu tienda universitaria de confianza',
+  title: 'Tienda en línea',
+  description: 'Tu tienda de confianza',
 };
 
 import { Toaster } from '@/components/ui';
 import { AuthSync } from '@/components/layout';
 
+/**
+ * Layout raíz de la aplicación. Configura fuentes, metadata y
+ * envuelve el contenido con AuthSync y Toaster.
+ */
 export default function RootLayout({
   children,
 }: Readonly<{

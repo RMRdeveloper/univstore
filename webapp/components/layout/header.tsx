@@ -83,7 +83,6 @@ export function Header() {
                   )}
                 </Link>
 
-                {/* Profile Dropdown */}
                 <div className="relative" ref={dropdownRef}>
                   <button
                     onClick={() => setIsProfileOpen(!isProfileOpen)}

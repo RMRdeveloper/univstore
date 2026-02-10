@@ -29,7 +29,6 @@ export function ImageUploader({ images, onImagesChange, maxImages = 6 }: ImageUp
     return getImageUrl(image);
   };
 
-  // Drag & Drop Handlers
   const handleDrag = (e: DragEvent<HTMLDivElement>, isOver: boolean) => {
     e.preventDefault();
     e.stopPropagation();
@@ -43,7 +42,6 @@ export function ImageUploader({ images, onImagesChange, maxImages = 6 }: ImageUp
     handleFiles(e.dataTransfer.files);
   };
 
-  // Paste Logic (Consolidated)
   const processPaste = (items: DataTransferItemList | undefined) => {
     if (!items) return;
     for (const item of Array.from(items)) {
@@ -65,7 +63,6 @@ export function ImageUploader({ images, onImagesChange, maxImages = 6 }: ImageUp
 
   useEffect(() => {
     const handleGlobalPaste = (e: globalThis.ClipboardEvent) => {
-      // Ignore if pasting into an input/textarea
       if (document.activeElement?.tagName === 'INPUT' || document.activeElement?.tagName === 'TEXTAREA') {
         return;
       }
@@ -74,7 +71,7 @@ export function ImageUploader({ images, onImagesChange, maxImages = 6 }: ImageUp
 
     window.addEventListener('paste', handleGlobalPaste);
     return () => window.removeEventListener('paste', handleGlobalPaste);
-  }, [handleFiles]); // Re-bind if handleFiles changes
+  }, [handleFiles]);
 
   const removeImage = (indexToRemove: number) => {
     onImagesChange(images.filter((_, index) => index !== indexToRemove));
@@ -138,7 +135,6 @@ export function ImageUploader({ images, onImagesChange, maxImages = 6 }: ImageUp
                 : 'border-slate-300 hover:border-indigo-400 hover:bg-slate-50'
             )}
           >
-            {/* Uploading UI removed */}
             <>
               <input
                 type="file"

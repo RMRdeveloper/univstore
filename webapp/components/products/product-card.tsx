@@ -13,6 +13,11 @@ interface ProductCardProps {
   className?: string;
 }
 
+/**
+ * Tarjeta de producto con imagen, badges, botón de wishlist y agregar al carrito.
+ * @param product - Datos del producto a mostrar
+ * @param className - Clases CSS opcionales para el contenedor
+ */
 export function ProductCard({ product, className }: ProductCardProps) {
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlistStore();
@@ -62,7 +67,6 @@ export function ProductCard({ product, className }: ProductCardProps) {
   return (
     <div className={cn('group relative bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-xl hover:border-indigo-100 transition-all duration-300', className)}>
       <Link href={`/products/${product.id}`} className="block">
-        {/* Image Container with Padding */}
         <div className="relative aspect-[4/5] bg-slate-50/50 p-6 overflow-hidden">
           <Image
             src={getImageUrl(product.images[0])}
@@ -73,7 +77,6 @@ export function ProductCard({ product, className }: ProductCardProps) {
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
 
-          {/* Badges */}
           <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
             {hasDiscount && (
               <span className="px-3 py-1 text-[10px] font-bold text-white tracking-wider uppercase bg-rose-500 rounded-full shadow-sm">
@@ -87,8 +90,6 @@ export function ProductCard({ product, className }: ProductCardProps) {
             )}
           </div>
 
-          {/* Wishlist Button */}
-          {/* Wishlist Button */}
           <button
             className={cn(
               "absolute top-4 right-4 w-9 h-9 flex items-center justify-center rounded-full bg-white shadow-sm border border-slate-100 transition-all duration-300 z-20",
@@ -106,7 +107,6 @@ export function ProductCard({ product, className }: ProductCardProps) {
             )}
           </button>
 
-          {/* Full Width Button on Hover */}
           <div className="absolute inset-x-4 bottom-4 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-20">
             <button
               className="w-full py-2.5 bg-slate-900 text-white font-semibold text-sm rounded-xl shadow-lg hover:bg-indigo-600 active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
@@ -125,7 +125,6 @@ export function ProductCard({ product, className }: ProductCardProps) {
           </div>
         </div>
 
-        {/* Content */}
         <div className="p-5">
           <div className="mb-3">
             <span className="text-[10px] font-bold tracking-wider text-indigo-500 uppercase bg-indigo-50 px-2 py-1 rounded-md">

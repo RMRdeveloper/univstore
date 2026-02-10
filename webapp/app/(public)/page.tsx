@@ -1,22 +1,31 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ArrowRight, ShoppingBag, Truck, Shield, Search } from 'lucide-react';
 import { Button, Card, CardContent } from '@/components/ui';
 import { CategoriesGrid } from '@/components/home';
 
+/**
+ * Página principal de la tienda. Muestra el hero con imagen de fondo,
+ * sección de características y grid de categorías destacadas.
+ */
 export default function HomePage() {
   return (
     <>
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-background pt-16 pb-24 lg:pt-32 lg:pb-40">
-        {/* Abstract Background Shapes */}
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full overflow-hidden pointer-events-none z-0">
-          <div className="absolute top-0 ml-[-20%] right-auto w-[40rem] h-[40rem] bg-indigo-100/50 rounded-full blur-3xl mix-blend-multiply opacity-70 animate-blob" />
-          <div className="absolute top-0 right-0 mr-[-20%] w-[40rem] h-[40rem] bg-violet-100/50 rounded-full blur-3xl mix-blend-multiply opacity-70 animate-blob animation-delay-2000" />
-          <div className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-[40rem] h-[40rem] bg-blue-100/50 rounded-full blur-3xl mix-blend-multiply opacity-70 animate-blob animation-delay-4000" />
+      <section className="relative overflow-hidden pt-16 pb-24 lg:pt-32 lg:pb-40 min-h-[85vh] flex flex-col justify-center">
+        <div className="absolute inset-0 z-0">
+          <Image
+            src="/hero-background.jpg"
+            alt=""
+            fill
+            className="object-cover blur-[2px]"
+            priority
+            sizes="100vw"
+          />
+          <div className="absolute inset-0 bg-white/55" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 z-10 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-indigo-100 text-indigo-600 text-sm font-semibold shadow-sm mb-8 transition-transform hover:scale-105 cursor-default">
+        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-indigo-100 text-indigo-600 text-sm font-semibold shadow-sm mb-8">
             <span className="relative flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
@@ -25,28 +34,25 @@ export default function HomePage() {
           </div>
 
           <h1 className="text-5xl md:text-7xl font-extrabold mb-8 tracking-tight leading-tight text-slate-900">
-            Tu tienda universitaria <br />
+            Todo lo que necesitas <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
-              de confianza
+              a un solo clic
             </span>
           </h1>
 
           <p className="text-xl text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto">
-            Equípate con lo mejor para tu vida académica. Desde la tecnología más puntera hasta los accesorios que definen tu estilo en el campus.
+            Tecnología, moda y accesorios seleccionados. Envío rápido y devoluciones sencillas.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/products">
-              <Button size="lg" className="h-14 px-8 text-base bg-slate-900 text-white hover:bg-indigo-600 shadow-xl shadow-slate-200 hover:shadow-indigo-200 transition-all duration-300 w-full sm:w-auto">
-                Ver Catálogo
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-          </div>
+          <Link href="/products">
+            <Button size="lg" className="h-14 px-8 text-base bg-slate-900 text-white hover:bg-indigo-600 shadow-xl shadow-slate-200 hover:shadow-indigo-200 transition-all duration-300">
+              Ver Catálogo
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </Link>
         </div>
       </section>
 
-      {/* Features Section */}
       <section className="py-24 bg-slate-50/50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -57,7 +63,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-3">Catálogo Curado</h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Miles de productos seleccionados específicamente para satisfacer las necesidades de estudiantes universitarios exigentes.
+                  Miles de productos seleccionados para satisfacer tus necesidades con la mejor calidad.
                 </p>
               </CardContent>
             </Card>
@@ -69,7 +75,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="text-xl font-bold text-slate-900 mb-3">Envíos Flash</h3>
                 <p className="text-slate-600 leading-relaxed">
-                  Sistema de logística optimizado para entregas rápidas directamente en el campus o residencia estudiantil.
+                  Sistema de logística optimizado para entregas rápidas a domicilio.
                 </p>
               </CardContent>
             </Card>
@@ -89,7 +95,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Categories Section */}
       <section className="py-24 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">

@@ -36,7 +36,6 @@ export function ProductForm({ initialData }: ProductFormProps) {
   return (
     <form onSubmit={handleSubmit} className="relative space-y-8 animate-in fade-in duration-500">
 
-      {/* Header Actions */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 sticky top-0 z-10 bg-slate-50/80 backdrop-blur-md py-4 -mx-8 px-8 border-b border-slate-200/50">
         <div>
           <h2 className="text-2xl font-bold bg-gradient-to-r from-slate-900 to-slate-600 bg-clip-text text-transparent">
@@ -66,10 +65,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-12">
-        {/* Main Column */}
         <div className="lg:col-span-2 space-y-6">
-
-          {/* Basic Info Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
             <div className="border-b border-slate-100 px-6 py-4 flex items-center gap-2 bg-slate-50/50">
               <div className="p-1.5 bg-blue-50 text-blue-600 rounded-lg">
@@ -100,7 +96,6 @@ export function ProductForm({ initialData }: ProductFormProps) {
             </div>
           </div>
 
-          {/* Media Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
             <div className="border-b border-slate-100 px-6 py-4 flex items-center gap-2 bg-slate-50/50">
               <div className="p-1.5 bg-purple-50 text-purple-600 rounded-lg">
@@ -118,10 +113,7 @@ export function ProductForm({ initialData }: ProductFormProps) {
           </div>
         </div>
 
-        {/* Sidebar Column */}
         <div className="space-y-6">
-
-          {/* Status/Org Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
             <div className="border-b border-slate-100 px-6 py-4 flex items-center gap-2 bg-slate-50/50">
               <div className="p-1.5 bg-indigo-50 text-indigo-600 rounded-lg">
@@ -166,7 +158,6 @@ export function ProductForm({ initialData }: ProductFormProps) {
             </div>
           </div>
 
-          {/* Pricing Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
             <div className="border-b border-slate-100 px-6 py-4 flex items-center gap-2 bg-slate-50/50">
               <div className="p-1.5 bg-green-50 text-green-600 rounded-lg">
@@ -196,7 +187,6 @@ export function ProductForm({ initialData }: ProductFormProps) {
             </div>
           </div>
 
-          {/* Inventory Card */}
           <div className="bg-white rounded-2xl shadow-sm border border-slate-200/60 overflow-hidden">
             <div className="border-b border-slate-100 px-6 py-4 flex items-center gap-2 bg-slate-50/50">
               <div className="p-1.5 bg-amber-50 text-amber-600 rounded-lg">

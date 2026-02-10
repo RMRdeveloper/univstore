@@ -6,6 +6,10 @@ import { useState, useEffect } from 'react';
 import { categoriesService } from '@/services';
 import type { Category } from '@/types';
 
+/**
+ * Grid de las primeras 4 categorías raíz. Carga dinámicamente desde la API
+ * y muestra skeleton mientras carga.
+ */
 export function CategoriesGrid() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [isLoading, setIsLoading] = useState(true);

@@ -277,7 +277,7 @@ export default function ProductDetailPage({
                 </div>
                 <div>
                   <h4 className="font-semibold text-slate-900 text-sm">Envío Rápido</h4>
-                  <p className="text-xs text-slate-500">En campus y ciudad.</p>
+                  <p className="text-xs text-slate-500">Envío a domicilio en toda la ciudad.</p>
                 </div>
               </div>
               <div className="flex items-start gap-3">
