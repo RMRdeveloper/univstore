@@ -3,14 +3,15 @@
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ShoppingCart, Heart, User, Search, Menu, Store, LogOut, UserCircle } from 'lucide-react';
-import { useAuthStore, useCartStore, useUIStore } from '@/stores';
+import { ShoppingCart, Heart, User, Search, Menu, Store, LogOut, UserCircle, Package } from 'lucide-react';
+import { useAuthStore, useCartStore, useUIStore, useIsAdmin } from '@/stores';
 import { Button } from '@/components/ui';
 import { CategoryDropdown } from './category-dropdown';
 
 export function Header() {
   const router = useRouter();
   const { isAuthenticated, user, logout } = useAuthStore();
+  const isAdmin = useIsAdmin();
   const { itemCount } = useCartStore();
   const { toggleSidebar, toggleSearch } = useUIStore();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -99,14 +100,16 @@ export function Header() {
                       </div>
 
                       <div className="py-1">
-                        <Link
-                          href="/admin"
-                          onClick={() => setIsProfileOpen(false)}
-                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
-                        >
-                          <Store className="h-4 w-4" />
-                          Vender
-                        </Link>
+                        {isAdmin && (
+                          <Link
+                            href="/admin"
+                            onClick={() => setIsProfileOpen(false)}
+                            className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                          >
+                            <Store className="h-4 w-4" />
+                            Vender
+                          </Link>
+                        )}
                         <Link
                           href="/profile"
                           onClick={() => setIsProfileOpen(false)}
@@ -114,6 +117,14 @@ export function Header() {
                         >
                           <UserCircle className="h-4 w-4" />
                           Mi Perfil
+                        </Link>
+                        <Link
+                          href="/orders"
+                          onClick={() => setIsProfileOpen(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 text-sm text-slate-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                        >
+                          <Package className="h-4 w-4" />
+                          Mis Órdenes
                         </Link>
                       </div>
 

@@ -1,29 +1,40 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Package, FolderTree, Users, ShoppingCart } from 'lucide-react';
-import { productsService, categoriesService } from '@/services';
+import { Package, FolderTree, ShoppingCart } from 'lucide-react';
+import { productsService, categoriesService, ordersService } from '@/services';
 import { Card, CardContent } from '@/components/ui';
 
 interface Stats {
   products: number;
   categories: number;
+  orders: number;
 }
 
 export default function AdminDashboardPage() {
-  const [stats, setStats] = useState<Stats>({ products: 0, categories: 0 });
+  const [stats, setStats] = useState<Stats>({ products: 0, categories: 0, orders: 0 });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchStats() {
       try {
-        const [productsData, categoriesData] = await Promise.all([
+        const [productsResult, categoriesResult, ordersResult] = await Promise.allSettled([
           productsService.getAll({ limit: 1 }),
           categoriesService.getAll(),
+          ordersService.getOrdersCount(),
         ]);
+        const productsData = productsResult.status === 'fulfilled' ? productsResult.value : { total: 0 };
+        const categoriesData = categoriesResult.status === 'fulfilled' ? categoriesResult.value : [];
+        let ordersCount = 0;
+        if (ordersResult.status === 'fulfilled') {
+          ordersCount = ordersResult.value;
+        } else if (ordersResult.reason?.response?.status !== 403) {
+          console.error('Error fetching orders count:', ordersResult.reason);
+        }
         setStats({
           products: productsData.total,
-          categories: categoriesData.length,
+          categories: Array.isArray(categoriesData) ? categoriesData.length : 0,
+          orders: ordersCount,
         });
       } catch (err) {
         console.error('Error fetching stats:', err);
@@ -37,15 +48,14 @@ export default function AdminDashboardPage() {
   const statCards = [
     { label: 'Total Productos', value: stats.products, icon: Package, color: 'bg-blue-500' },
     { label: 'Categorías', value: stats.categories, icon: FolderTree, color: 'bg-green-500' },
-    { label: 'Usuarios', value: '-', icon: Users, color: 'bg-purple-500' },
-    { label: 'Pedidos', value: '-', icon: ShoppingCart, color: 'bg-orange-500' },
+    { label: 'Pedidos', value: stats.orders, icon: ShoppingCart, color: 'bg-orange-500' },
   ];
 
   return (
     <div>
       <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50 mb-6">Dashboard</h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {statCards.map((stat) => (
           <Card key={stat.label}>
             <CardContent className="p-6">

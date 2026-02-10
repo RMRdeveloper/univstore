@@ -2,6 +2,7 @@ import {
   Injectable,
   NotFoundException,
   ConflictException,
+  BadRequestException,
 } from '@nestjs/common';
 import { Types } from 'mongoose';
 import slugify from 'slugify';
@@ -91,6 +92,22 @@ export class ProductsService {
     if (!product) {
       throw new NotFoundException('Product not found');
     }
+  }
+
+  async decrementStock(
+    productId: Types.ObjectId,
+    quantity: number,
+  ): Promise<ProductDocument> {
+    const product = await this.productsRepository.decrementStock(
+      productId,
+      quantity,
+    );
+    if (!product) {
+      throw new BadRequestException(
+        'Product not found or insufficient stock',
+      );
+    }
+    return product;
   }
 
   private async getUniqueSlug(name: string, excludeId?: Types.ObjectId): Promise<string> {

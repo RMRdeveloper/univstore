@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Package, FolderTree, Users, ArrowLeft } from 'lucide-react';
-import { useAuthStore } from '@/stores';
+import { LayoutDashboard, Package, FolderTree, ArrowLeft } from 'lucide-react';
+import { useAuthStore, useIsAdmin } from '@/stores';
 import { cn } from '@/lib';
 
 interface NavItem {
@@ -19,7 +19,6 @@ const navItems: NavItem[] = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/products', label: 'Productos', icon: Package },
   { href: '/admin/categories', label: 'Categorías', icon: FolderTree, roles: ['admin'] },
-  { href: '/admin/users', label: 'Usuarios', icon: Users, roles: ['admin'] },
 ];
 
 export default function AdminLayout({
@@ -30,12 +29,19 @@ export default function AdminLayout({
   const router = useRouter();
   const pathname = usePathname();
   const { isAuthenticated, isHydrated, user } = useAuthStore();
+  const isAdmin = useIsAdmin();
 
   useEffect(() => {
     if (isHydrated && !isAuthenticated) {
       router.push('/login');
     }
   }, [isAuthenticated, isHydrated, router]);
+
+  useEffect(() => {
+    if (isHydrated && isAuthenticated && !isAdmin) {
+      router.push('/');
+    }
+  }, [isHydrated, isAuthenticated, isAdmin, router]);
 
   if (!isHydrated) {
     return (
@@ -45,10 +51,9 @@ export default function AdminLayout({
     );
   }
 
-  if (!isAuthenticated) {
+  if (!isAuthenticated || !isAdmin) {
     return null;
   }
-
 
   const filteredNavItems = navItems.filter((item) => {
     if (!item.roles) return true;

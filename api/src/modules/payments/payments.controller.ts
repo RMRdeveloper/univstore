@@ -22,4 +22,12 @@ export class PaymentsController {
 
     return this.paymentsService.createPaymentIntent(userId);
   }
+
+  @Post('confirm')
+  confirm(@Request() req: RequestWithUser) {
+    const raw = req.user.userId ?? req.user.sub ?? req.user._id;
+    const userId = raw?.toString?.() ?? String(raw ?? '');
+
+    return this.paymentsService.confirmOrderFromCart(userId);
+  }
 }

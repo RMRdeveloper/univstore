@@ -1,21 +1,24 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { use, useEffect, useState } from 'react';
 import { categoriesService } from '@/services';
 import { CategoryForm } from '@/components/admin';
 import type { Category } from '@/types';
 
-export default function EditCategoryPage() {
-  const params = useParams();
+export default function EditCategoryPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = use(params);
   const [category, setCategory] = useState<Category | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchCategory() {
-      if (!params.id) return;
+      if (!id) return;
       try {
-        const data = await categoriesService.getById(params.id as string);
+        const data = await categoriesService.getById(id);
         setCategory(data);
       } catch (err) {
         console.error('Error fetching category:', err);
@@ -24,7 +27,7 @@ export default function EditCategoryPage() {
       }
     }
     fetchCategory();
-  }, [params.id]);
+  }, [id]);
 
   if (isLoading) {
     return (

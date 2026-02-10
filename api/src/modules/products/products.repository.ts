@@ -140,6 +140,19 @@ export class ProductsRepository {
     return this.productModel.findByIdAndDelete(id).exec();
   }
 
+  async decrementStock(
+    productId: Types.ObjectId,
+    quantity: number,
+  ): Promise<ProductDocument | null> {
+    return this.productModel
+      .findOneAndUpdate(
+        { _id: productId, stock: { $gte: quantity } },
+        { $inc: { stock: -quantity } },
+        { new: true },
+      )
+      .exec();
+  }
+
   async existsBySlug(slug: string, excludeId?: Types.ObjectId): Promise<boolean> {
     const filter: ProductFilter = { slug };
     if (excludeId) {

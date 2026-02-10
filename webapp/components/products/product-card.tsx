@@ -4,7 +4,7 @@ import { Heart, ShoppingCart } from 'lucide-react';
 import { cn, formatPrice, getImageUrl } from '@/lib';
 import { Card } from '@/components/ui';
 import type { Product } from '@/types';
-import { useWishlistStore } from '@/stores/wishlist.store';
+import { useCartStore, useAuthStore, useWishlistStore } from '@/stores';
 import { useState, useCallback } from 'react';
 import { toast } from 'sonner';
 
@@ -16,8 +16,27 @@ interface ProductCardProps {
 export function ProductCard({ product, className }: ProductCardProps) {
   const hasDiscount = product.compareAtPrice && product.compareAtPrice > product.price;
   const { isInWishlist, addToWishlist, removeFromWishlist } = useWishlistStore();
+  const { addItem, isLoading: isAddingToCart } = useCartStore();
+  const { isAuthenticated } = useAuthStore();
   const [isLoading, setIsLoading] = useState(false);
   const inWishlist = isInWishlist(product.id);
+
+  const handleAddToCart = useCallback(async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isAuthenticated) {
+      toast.info('Inicia sesión para comprar');
+      return;
+    }
+    if (product.stock === 0) return;
+    try {
+      await addItem(product.id, 1);
+      toast.success('Agregado al carrito');
+    } catch (err) {
+      console.error(err);
+      toast.error('Error al agregar al carrito');
+    }
+  }, [product.id, product.stock, isAuthenticated, addItem]);
 
   const toggleWishlist = useCallback(async (e: React.MouseEvent) => {
     e.preventDefault();
@@ -90,14 +109,18 @@ export function ProductCard({ product, className }: ProductCardProps) {
           {/* Full Width Button on Hover */}
           <div className="absolute inset-x-4 bottom-4 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-20">
             <button
-              className="w-full py-2.5 bg-slate-900 text-white font-semibold text-sm rounded-xl shadow-lg hover:bg-indigo-600 active:scale-95 transition-all flex items-center justify-center gap-2"
-              onClick={(e) => {
-                e.preventDefault();
-                console.log('Quick add', product.id);
-              }}
+              className="w-full py-2.5 bg-slate-900 text-white font-semibold text-sm rounded-xl shadow-lg hover:bg-indigo-600 active:scale-95 transition-all flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              onClick={handleAddToCart}
+              disabled={product.stock === 0 || isAddingToCart}
             >
-              <ShoppingCart className="w-4 h-4" />
-              Agregar
+              {isAddingToCart ? (
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+              ) : (
+                <>
+                  <ShoppingCart className="w-4 h-4" />
+                  {product.stock === 0 ? 'Agotado' : 'Agregar'}
+                </>
+              )}
             </button>
           </div>
         </div>

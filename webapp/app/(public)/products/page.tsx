@@ -1,21 +1,40 @@
 'use client';
 
-import { Suspense, useEffect, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { Suspense, use, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { productsService, searchService } from '@/services';
 import { ProductGrid, ProductFilters } from '@/components/products';
 import { Button } from '@/components/ui';
 import type { Product, PaginatedResult } from '@/types';
 
-function ProductsContent() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+type SearchParamsRecord = Record<string, string | string[] | undefined>;
 
-  const q = searchParams.get('q');
-  const categoryId = searchParams.get('category');
-  const minPrice = searchParams.get('minPrice') ? Number(searchParams.get('minPrice')) : undefined;
-  const maxPrice = searchParams.get('maxPrice') ? Number(searchParams.get('maxPrice')) : undefined;
-  const page = searchParams.get('page') ? Number(searchParams.get('page')) : 1;
+function getParam(searchParams: SearchParamsRecord, key: string): string | null {
+  const v = searchParams[key];
+  if (v == null) return null;
+  return Array.isArray(v) ? v[0] ?? null : v;
+}
+
+function searchParamsToQueryString(searchParams: SearchParamsRecord): string {
+  const p = new URLSearchParams();
+  Object.entries(searchParams).forEach(([k, v]) => {
+    if (v === undefined) return;
+    (Array.isArray(v) ? v : [v]).forEach((vv) => p.append(k, vv));
+  });
+  return p.toString();
+}
+
+function ProductsContent({ searchParams }: { searchParams: SearchParamsRecord }) {
+  const router = useRouter();
+
+  const q = getParam(searchParams, 'q');
+  const categoryId = getParam(searchParams, 'category');
+  const minPriceRaw = getParam(searchParams, 'minPrice');
+  const maxPriceRaw = getParam(searchParams, 'maxPrice');
+  const pageRaw = getParam(searchParams, 'page');
+  const minPrice = minPriceRaw ? Number(minPriceRaw) : undefined;
+  const maxPrice = maxPriceRaw ? Number(maxPriceRaw) : undefined;
+  const page = pageRaw ? Number(pageRaw) : 1;
 
   const [data, setData] = useState<PaginatedResult<Product> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -53,9 +72,8 @@ function ProductsContent() {
   }, [page, q, categoryId, minPrice, maxPrice]);
 
   const handlePageChange = (newPage: number) => {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('page', String(newPage));
-    router.push(`?${params.toString()}`);
+    const next = { ...searchParams, page: String(newPage) };
+    router.push(`?${searchParamsToQueryString(next)}`);
   };
 
   return (
@@ -119,10 +137,15 @@ function ProductsContent() {
   );
 }
 
-export default function ProductsPage() {
+export default function ProductsPage({
+  searchParams,
+}: {
+  searchParams: Promise<SearchParamsRecord>;
+}) {
+  const resolved = use(searchParams);
   return (
     <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Cargando...</div>}>
-      <ProductsContent />
+      <ProductsContent searchParams={resolved} />
     </Suspense>
   );
 }

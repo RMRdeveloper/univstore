@@ -16,6 +16,7 @@ import { SearchModule } from './modules/search/search.module.js';
 import { UploadModule } from './modules/upload/upload.module.js';
 import { SeedModule } from './database/seed/seed.module.js';
 import { PaymentsModule } from './modules/payments/payments.module.js';
+import { OrdersModule } from './modules/orders/orders.module.js';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { PaymentsModule } from './modules/payments/payments.module.js';
     UploadModule,
     SeedModule,
     PaymentsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService],
