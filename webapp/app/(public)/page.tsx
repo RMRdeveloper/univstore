@@ -11,7 +11,7 @@ import { CategoriesGrid } from '@/components/home';
 export default function HomePage() {
   return (
     <>
-      <section className="relative overflow-hidden pt-16 pb-24 lg:pt-32 lg:pb-40 min-h-[85vh] flex flex-col justify-center">
+      <section className="relative overflow-hidden pt-16 pb-20 lg:pt-24 lg:pb-28 min-h-[60vh] flex flex-col justify-center">
         <div className="absolute inset-0 z-0">
           <Image
             src="/hero-background.jpg"
@@ -25,14 +25,6 @@ export default function HomePage() {
         </div>
 
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/90 border border-indigo-100 text-indigo-600 text-sm font-semibold shadow-sm mb-8">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-indigo-500"></span>
-            </span>
-            Nueva colección 2026 disponible
-          </div>
-
           <h1 className="text-5xl md:text-7xl font-extrabold mb-8 tracking-tight leading-tight text-slate-900">
             Todo lo que necesitas <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-violet-600">
