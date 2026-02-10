@@ -59,7 +59,7 @@ export class PaymentsService {
         amount: Math.round(totalAmount * 100),
         currency: 'usd',
         automatic_payment_methods: { enabled: true },
-        metadata: { userId },
+        metadata: { userId: String(userId) },
       };
 
       const paymentIntent: Stripe.PaymentIntent =

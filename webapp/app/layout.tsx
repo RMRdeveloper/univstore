@@ -18,6 +18,7 @@ export const metadata: Metadata = {
 };
 
 import { Toaster } from '@/components/ui';
+import { AuthSync } from '@/components/layout';
 
 export default function RootLayout({
   children,
@@ -27,6 +28,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}>
+        <AuthSync />
         {children}
         <Toaster />
       </body>

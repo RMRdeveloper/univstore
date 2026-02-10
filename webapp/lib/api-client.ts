@@ -29,6 +29,7 @@ class ApiClient {
         if (error.response?.status === 401) {
           if (typeof window !== 'undefined') {
             localStorage.removeItem(AUTH_TOKEN_KEY);
+            window.dispatchEvent(new CustomEvent('auth:session-expired'));
           }
         }
         return Promise.reject(error);

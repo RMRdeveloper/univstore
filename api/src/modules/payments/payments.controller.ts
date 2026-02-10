@@ -1,6 +1,6 @@
 import { Controller, Post, UseGuards, Request } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
-import { PaymentsService } from './payments.service'; // SIN .js
+import { PaymentsService } from './payments.service';
 
 interface RequestWithUser {
   user: {
@@ -17,8 +17,9 @@ export class PaymentsController {
 
   @Post('create-intent')
   createIntent(@Request() req: RequestWithUser) {
-    const userId = req.user.userId || req.user.sub || req.user._id;
+    const raw = req.user.userId ?? req.user.sub ?? req.user._id;
+    const userId = raw?.toString?.() ?? String(raw ?? '');
 
-    return this.paymentsService.createPaymentIntent(userId as string);
+    return this.paymentsService.createPaymentIntent(userId);
   }
 }

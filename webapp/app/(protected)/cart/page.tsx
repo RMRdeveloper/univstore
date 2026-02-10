@@ -60,7 +60,7 @@ export default function CartPage() {
   return (
     <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <div className="flex items-center justify-between mb-8">
-        <h1 className="text-3xl font-bold text-gray-900">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
           Carrito ({itemCount})
         </h1>
         <Button variant="ghost" onClick={() => clearCart()}>
@@ -85,15 +85,15 @@ export default function CartPage() {
                 <div className="flex-1">
                   <Link
                     href={`/products/${item.product.id}`}
-                    className="font-medium text-gray-900 hover:text-blue-600"
+                    className="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400"
                   >
                     {item.product.name}
                   </Link>
-                  <p className="text-lg font-bold text-gray-900 mt-1">
+                  <p className="text-lg font-bold text-gray-900 dark:text-white mt-1">
                     {formatPrice(item.product.price)}
                   </p>
                   <div className="flex items-center gap-4 mt-2">
-                    <div className="flex items-center border border-gray-300 rounded-lg">
+                    <div className="flex items-center border border-gray-300 dark:border-slate-600 rounded-lg bg-gray-50 dark:bg-slate-800/50">
                       <button
                         onClick={() =>
                           updateItem(
@@ -101,12 +101,12 @@ export default function CartPage() {
                             Math.max(1, item.quantity - 1),
                           )
                         }
-                        className="p-1 hover:bg-gray-100"
+                        className="p-1.5 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-600 rounded-l-md disabled:opacity-40 disabled:cursor-not-allowed"
                         disabled={item.quantity <= 1}
                       >
                         <Minus className="h-4 w-4" />
                       </button>
-                      <span className="px-3 text-sm">{item.quantity}</span>
+                      <span className="px-3 text-sm text-gray-900 dark:text-white min-w-[1.5rem] text-center">{item.quantity}</span>
                       <button
                         onClick={() =>
                           updateItem(
@@ -114,7 +114,7 @@ export default function CartPage() {
                             Math.min(item.product.stock, item.quantity + 1),
                           )
                         }
-                        className="p-1 hover:bg-gray-100"
+                        className="p-1.5 text-gray-700 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-slate-600 rounded-r-md disabled:opacity-40 disabled:cursor-not-allowed"
                         disabled={item.quantity >= item.product.stock}
                       >
                         <Plus className="h-4 w-4" />
@@ -122,14 +122,14 @@ export default function CartPage() {
                     </div>
                     <button
                       onClick={() => removeItem(item.product.id)}
-                      className="text-red-500 hover:text-red-700"
+                      className="text-red-500 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300"
                     >
                       <Trash2 className="h-5 w-5" />
                     </button>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="font-bold text-gray-900">
+                  <p className="font-bold text-gray-900 dark:text-white">
                     {formatPrice(item.product.price * item.quantity)}
                   </p>
                 </div>
@@ -139,18 +139,18 @@ export default function CartPage() {
         </div>
 
         <div className="lg:col-span-1">
-          <Card className="p-6 sticky top-24">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Resumen</h2>
+          <Card className="p-6 sticky top-24 text-gray-900 dark:text-white border-gray-200 dark:border-slate-700">
+            <h2 className="text-lg font-bold mb-4">Resumen</h2>
             <div className="space-y-3 text-sm">
               <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal</span>
+                <span className="text-gray-600 dark:text-gray-400">Subtotal</span>
                 <span className="font-medium">{formatPrice(total)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-gray-600">Envío</span>
-                <span className="font-medium text-green-600">Gratis</span>
+                <span className="text-gray-600 dark:text-gray-400">Envío</span>
+                <span className="font-medium text-green-600 dark:text-green-400">Gratis</span>
               </div>
-              <div className="border-t pt-3 flex justify-between">
+              <div className="border-t border-gray-200 dark:border-slate-600 pt-3 flex justify-between">
                 <span className="font-bold">Total</span>
                 <span className="font-bold text-lg">{formatPrice(total)}</span>
               </div>

@@ -7,12 +7,10 @@ import { Elements } from "@stripe/react-stripe-js";
 import axios, { isAxiosError } from "axios";
 import { CheckoutForm } from "@/components/checkout";
 import { Card } from "@/components/ui/card";
-// Importamos los tipos, aunque usaremos 'any' en la respuesta para evitar errores de estructura
 import { BackendErrorResponse } from "@/types";
 import { AUTH_TOKEN_KEY } from "@/lib";
 import { useCartStore } from "@/stores/cart.store";
 
-// Inicializamos Stripe fuera del componente
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!,
 );
@@ -24,15 +22,13 @@ interface PaymentIntentResponse {
 export default function CheckoutPage() {
   const [clientSecret, setClientSecret] = useState<string>("");
   const [error, setError] = useState<string>("");
-  const [isLoading, setIsLoading] = useState<boolean>(true); // Estado extra para control visual
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const router = useRouter();
   const { total, cart } = useCartStore();
   useEffect(() => {
-    // 1. CORRECCIÓN: Usamos el nombre real de tu token
     const token = localStorage.getItem(AUTH_TOKEN_KEY);
 
     if (!token) {
-      // 2. CORRECCIÓN: La ruta real es /login (sin auth/)
       router.push("/login");
       return;
     }
@@ -59,8 +55,6 @@ export default function CheckoutPage() {
         const { data } = await axios.post<PaymentIntentResponse>(
           `${process.env.NEXT_PUBLIC_API_URL}/payments/create-intent`,
           {
-            // Muchos backends de Stripe esperan el total en centavos (total * 100)
-            // Intenta primero con 'total' y si falla prueba: amount: Math.round(total * 100)
             amount: total,
             items: itemsParaBackend,
           },
@@ -93,12 +87,8 @@ export default function CheckoutPage() {
     };
 
     void initPayment();
-    // Agregamos las dependencias para que el efecto se actualice si el carrito cambia
   }, [router, total, cart, isLoading]);
 
-  // Renderizado Condicional
-
-  // 1. Estado de Carga Inicial
   if (isLoading && !clientSecret && !error) {
     return (
       <div className="container mx-auto py-20 px-4 flex flex-col items-center justify-center">
@@ -117,7 +107,6 @@ export default function CheckoutPage() {
 
       <div className="max-w-xl mx-auto">
         {error ? (
-          // 2. Estado de Error
           <div
             className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded relative"
             role="alert"
@@ -132,7 +121,6 @@ export default function CheckoutPage() {
             </button>
           </div>
         ) : (
-          // 3. Estado de Éxito (Formulario)
           <Card className="p-6 shadow-md bg-white">
             {clientSecret && (
               <Elements stripe={stripePromise} options={{ clientSecret }}>
